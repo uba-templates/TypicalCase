@@ -1,13 +1,13 @@
 {
-  "name": "tinper-react-scaffold",
-  "version": "2.0.0",
-  "description": "tinper react scaffold",
+  "name": "typicalcase",
+  "version": "1.0.0",
+  "description": "typical case",
   "private": true,
   "scripts": {
     "dev": "uba server",
     "build": "uba build"
   },
-  "author": "yueming@yonyou.com",
+  "author": "liuzhipeng@yonyou.com",
   "license": "MIT",
   "devDependencies": {
     "uba": "4.0.0-rc.1",
