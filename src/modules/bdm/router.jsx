@@ -5,6 +5,7 @@ import React from "react";
 import { Route,Link } from "mirrorx";
 import User from './containers/User';
 import UserAdd from './containers/UserAdd';
+import Master from './containers/Master'
 
 
 const Routers = ({ match }) => (
@@ -14,6 +15,7 @@ const Routers = ({ match }) => (
         )}/>
         <Route exact path={`${match.url}/user`} component={User}/>
         <Route exact path={`${match.url}/user/add`} component={UserAdd}/>
+        <Route exact path={`${match.url}/Master`} component={Master}/>
 	</div>
 );
 
