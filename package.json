@@ -7,7 +7,7 @@
     "dev": "uba server",
     "build": "uba build"
   },
-  "author": "liuzhipeng@yonyou.com",
+  "author": "liuzhpc@yonyou.com",
   "license": "MIT",
   "devDependencies": {
     "uba": "4.0.0-rc.1",
