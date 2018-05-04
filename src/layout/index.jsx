@@ -22,8 +22,8 @@ export default class App extends Component {
 						</li>
 					</ul>
 					<ul className="index-main">
-					<li className="index-main-li">
-						<h3>典型案例</h3>
+						<li className="index-main-li">
+							<h3>典型案例</h3>
 							<ul className="index-ul">
 								<li className="index-li">
 									<Link to="/bdm/Master">主子表</Link>
