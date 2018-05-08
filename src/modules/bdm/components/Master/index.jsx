@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { actions } from "mirrorx";
-import { Table, Button, Col, Row, Icon ,Popconfirm,Checkbox } from 'tinper-bee';
+import { Table,ButtonGroup, Button, Col, Row, Icon ,Popconfirm,Checkbox } from 'tinper-bee';
+import Add from '../Add';
 import multiSelect from "tinper-bee/lib/multiSelect.js";
 import sort from "tinper-bee/lib/sort.js";
 import sum from "tinper-bee/lib/sum.js";
@@ -61,7 +62,7 @@ const columns13 = [
   ];
   
 
-  const data13 = [
+/*   const data13 = [
     { code: "001", name: "督办名称", ly_code: 30, zrr: "杨过", key: "2" },
     { code: "002", name: "男", ly_code: 41, zrr: "郭靖", key: "1" },
     { code: "003", name: "男", ly_code: 25, zrr: "欧阳锋", key: "3" }
@@ -85,19 +86,26 @@ const columns13 = [
         { sub_code: "003003", sub_name: "男", sub_ms: "令狐冲", d: "大侠", key: "1" },
         { sub_code: "003004", sub_name: "男", sub_ms: 25, d: "郭靖", key: "3" }
     ]
-  } ;
+  } ; */
 
 let ComplexTable = multiSelect(sum(sort(Table)));
 class MasterTable  extends Component {
-
+    /* 
+        showIndex用于组件切换，为0表示加载列表
+        为1、2分别表示新增、修改
+     */
     constructor(props) {
         super(props);
-        this.state = {
-            data13: data13,
+        console.log('props',props);
+/*         this.state = {
+            data13: [],
             data13_1:[],
             selectedRow: this.selectedRow,
-            selectDisabled: this.selectDisabled
-        };
+            selectDisabled: this.selectDisabled,
+            selData:[],
+            selChildData:[],
+            showIndex:0
+        }; */
     }
     getParSelectData = data => {
         // console.log(data);
@@ -107,22 +115,20 @@ class MasterTable  extends Component {
     }
     addClick = ()=>{
         console.log("添加数据");
+/*         this.setState({
+            showIndex:1
+        }) */
     }
     editClick = ()=>{
         console.log("编辑数据");
     }
     delClick = ()=>{
         console.log("删除数据");
-        let {data13} = this.state;
-        for(var i=0;i<data13.length;i++){
-
-        }
+        // 根据pk请求后端删除，前端刷新
     }
     rowClick=(record, index, event)=>{
         console.log(record,index);
-        this.setState({
-            data13_1:data13_1[index]
-        })
+        actions.master.rowClick(index);
     }
     selectedRow=(record,index)=>{
         console.log("selectedRow",index);
@@ -131,44 +137,45 @@ class MasterTable  extends Component {
         let multiObj = {
             type: "checkbox"
         };
-        return (
-            <div>
-                <Button className="editable-add-btn" onClick={this.addClick}>
-                    新增
-                </Button>
-                <Button
-                    className="editable-add-btn"
-                    style={{ marginLeft: "5px" }}
-                    onClick={this.editClick}
-                >
-                    编辑
-                </Button>
-                <Button
-                    className="editable-add-btn"
-                    style={{ marginLeft: "5px" }}
-                    onClick={this.delClick}
-
-                >
-                    删除
-                </Button>
-                <ComplexTable
-                    selectDisabled={this.state.selectDisabled}
-                    columns={columns13}
-                    data={this.state.data13}
-                    multiSelect={multiObj}
-                    getSelectedDataFunc={this.getParSelectData}
-                    onRowClick={this.rowClick}
-                    title={currentData => <div>标题: 我是主表</div>}
-                />
-                <ComplexTable
-                    columns={columns13_1}
-                    data={this.state.data13_1}
-                    multiSelect={multiObj}
-                    getSelectedDataFunc={this.getChildSelectData}
-                    title={currentData => <div>标题: 我是子表</div>}
-                />
-            </div>  
-        );
+        let {showIndex,data13,data13_1} = this.props;
+        console.log("showIndex",showIndex);
+/*         switch(showIndex){
+            case 0: */
+                return (
+                    <div>
+                        <ButtonGroup style={{ margin: 10 }}>
+                            <Button colors="primary" onClick={this.addClick} >新增</Button>
+                            <Button colors="primary" onClick={this.editClick} >修改</Button>
+                            <Button colors="primary" onClick={this.delClick}>删除</Button>
+                        </ButtonGroup>
+                        <ComplexTable
+                            columns={columns13}
+                            data={data13}
+                            multiSelect={multiObj}
+                            getSelectedDataFunc={this.getParSelectData}
+                            onRowClick={this.rowClick}
+                            title={currentData => <div>标题: 我是主表</div>}
+                        />  
+                        <ComplexTable
+                            columns={columns13_1}
+                            data={data13_1}
+                            multiSelect={multiObj}
+                            getSelectedDataFunc={this.getChildSelectData}
+                            title={currentData => <div>标题: 我是子表</div>}
+                        />
+                    </div>  
+                );
+           /*  case 1:
+                return (
+                    <div>
+                        <Add />
+                    </div>
+                );
+            case 2:
+                return (
+                    <div>修改</div>
+                );
+        } */
     }
 }
 

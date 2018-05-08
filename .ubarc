@@ -27,6 +27,9 @@
     "GET": [
       {
         "/nc/api/user": "./mock/nc/api/user.json"
+      },
+      {
+        "/test/getData":"./mock/test/list.json"
       }
     ],
     "POST": [

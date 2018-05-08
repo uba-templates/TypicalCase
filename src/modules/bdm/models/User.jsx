@@ -24,6 +24,7 @@ export default {
     effects : {
         async load() {
             let { data : { data : list ,success } } = await api.get();
+            console.log({list});
             if (success) {
                 actions.user.save({list});
             }else{

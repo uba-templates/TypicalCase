@@ -1,0 +1,30 @@
+{
+    "data":{
+        "data":[
+            { "code": "001", "name": "督办名称", "ly_code": 30, "zrr": "杨过", "key": "2" },
+            { "code": "002", "name": "男", "ly_code": 41, "zrr": "郭靖", "key": "1" },
+            { "code": "003", "name": "男", "ly_code": 25, "zrr": "欧阳锋", "key": "3" }
+        ],
+        "childData":{
+            "0":[
+                { "sub_code": "001001", "sub_name": "名称1", "sub_ms": "小龙女", "d": "内行", "key": "2" },
+                { "sub_code": "001002", "sub_name": "男", "sub_ms": "杨过", "d": "内行", "key": "4" },
+                { "sub_code": "001003", "sub_name": "男", "sub_ms": "令狐冲", "d": "大侠", "key": "1" },
+                { "sub_code": "001004", "sub_name": "男", "sub_ms": 25, "d": "郭靖", "key": "3" }
+            ],
+            "1":[
+                { "sub_code": "002001", "sub_name": "名称2", "sub_ms": "小龙女", "d": "内行", "key": "2" },
+                { "sub_code": "002002", "sub_name": "男", "sub_ms": "杨过", "d": "内行", "key": "4" },
+                { "sub_code": "002003", "sub_name": "男", "sub_ms": "令狐冲", "d": "大侠", "key": "1" },
+                { "sub_code": "002004", "sub_name": "男", "sub_ms": 25, "d": "郭靖", "key": "3" }
+            ],
+            "2":[
+                { "sub_code": "003001", "sub_name": "名称3", "sub_ms": "小龙女", "d": "内行", "key": "2" },
+                { "sub_code": "003002", "sub_name": "男", "sub_ms": "杨过", "d": "内行", "key": "4" },
+                { "sub_code": "003003", "sub_name": "男", "sub_ms": "令狐冲", "d": "大侠", "key": "1" },
+                { "sub_code": "003004", "sub_name": "男", "sub_ms": 25, "d": "郭靖", "key": "3" }
+            ]
+        }
+    },
+    "success":true
+}
