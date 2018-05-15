@@ -109,7 +109,7 @@ class MasterTable  extends Component {
     }
     addClick = ()=>{
         console.log("添加数据");
-        actions.master.add();
+        actions.master.changePage({"showIndex":1});
     }
     editClick = ()=>{
         console.log("编辑数据");

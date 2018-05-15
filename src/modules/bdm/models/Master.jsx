@@ -57,11 +57,12 @@ export default {
             }
             actions.master.save(tempState);
         },
-        async add(data,getState){
-            let tempState = {
+        async changePage(data,getState){
+            console.log(data);
+            /* let tempState = {
                 showIndex:1
-            }
-            actions.master.save(tempState);
+            } */
+            actions.master.save(data);
         },
         async createByPage(data,getState){
             let { data : { success } } = await api.add(data);

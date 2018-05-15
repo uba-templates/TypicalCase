@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import {Button,FormControl,Label,Checkbox,InputNumber,Input,Col, Row,Icon} from 'tinper-bee';
+import {Button,FormControl,Label,Checkbox,InputNumber,Input,Col, Row,Icon,Select} from 'tinper-bee';
 import Form from 'bee-form';
 import { actions } from 'mirrorx';
 import createModal from 'yyuap-ref';
 
 import './index.less'
+
+const Option = Select.Option;
+
 const FormItem = Form.FormItem;
 const tempArray = [
     {"labelname":"督办编号","field":"code","hasRef":false},
@@ -83,15 +86,18 @@ class Add extends Component {
             }
         )
     }
+    backClick=()=>{
+        actions.master.changePage({"showIndex":0})
+    }
     render() {
-        const { getFieldProps, getFieldError } = this.props.form;
+        const { getFieldProps, getFieldError,getFieldDecorator } = this.props.form;
         // console.log(this.props);
         return (
             <div>
                 <div className="page">
                     <div className="content">
                         <div className="topPart">
-                            <Button size="sm" colors="info" className="backBtn" >返回</Button>
+                            <Button size="sm" colors="info" className="backBtn" onClick={this.backClick}>返回</Button>
                             <h1>新建督办任务</h1>
                             <Button size="sm" shape="border" colors="info" className="cancelBtn">取消</Button>
                             <Button size="sm" colors="info" className="saveBtn">保存</Button>
@@ -139,7 +145,7 @@ class Add extends Component {
                         </FormItem> 
                     </Form>*/ }
                     <div className="user-form">
-                        <Form useRow={true}>
+                        <Form >
                             <Row>
                                 <Col md={4} xs={4} sm={4}>
                                     <FormItem>
@@ -184,7 +190,15 @@ class Add extends Component {
                                             rules: [{
                                                 required: true, message: '请输入督办来源',
                                             }],
-                                        }) } />
+                                        }) }
+                                          {
+                                            ...getFieldDecorator('ly_code',{})(
+                                                <Select placeholder="Please select a country">
+                                                  <Option value="china">China</Option>
+                                                  <Option value="use">U.S.A</Option>
+                                                </Select>
+                                              )
+                                          } />
                                         <span className='error'>
                                             {getFieldError('ly_code')}
                                         </span>
@@ -405,7 +419,7 @@ class Add extends Component {
                                 <Col md={4} xs={4} sm={4}>
                                     <FormItem >
                                         <Label className="label_ajust">任务评分</Label>
-                                        <FormControl className="input_adjust" placeholder="" 
+                                        <FormControl className="input_adjust require_icon_adjust" placeholder="" 
                                         {...getFieldProps('rwpf', {
                                             validateTrigger: 'onBlur',
                                             rules: [{
@@ -453,13 +467,15 @@ class Add extends Component {
                                     <FormItem >
                                         <Label className="label_ajust">状态</Label>
                                         <FormControl className="input_adjust require_icon_adjust" placeholder=""
-                                        value={"待确认"} 
+                                         
                                         {...getFieldProps('state', {
                                             validateTrigger: 'onBlur',
+                                            initialValue:"待确认",
                                             rules: [{
                                                 required: false
                                             }],
-                                        }) } />
+                                        }) } 
+                                        />
                                         <span className='error'>
                                             {getFieldError('state')}
                                         </span>
@@ -474,7 +490,7 @@ class Add extends Component {
                                             rules: [{
                                                 required: false, message: '请选择组织',
                                             }],
-                                        }) } />
+                                        }) }  />
                                         <span className='error'>
                                             {getFieldError('unitid')}
                                         </span>
