@@ -1,16 +1,21 @@
 import {actions} from 'mirrorx';
 import * as api from "../services/Master";
 import { Info,Error } from "utils";
+/**
+ * childTotalData为主表所对应子表所有数据
+ * masterData主表数据
+ * childData子表数据
+ */
 
 export default {
     name : "master",
     initialState : {
-        data13: [],
-        data13_1:[],
+        masterData: [],
+        childData:[],
         selData:[],
         selChildData:[],
         showIndex:0,
-        childData:{}
+        childTotalData:{}
     },
     reducers : {
         save(state, data) {
@@ -23,14 +28,14 @@ export default {
     },
     effects : {
         async load() {
-            let { data : {data:{data:{data,childData},success}} } = await api.get();
+            let { data : {data:{data:{data,childTotalData},success}} } = await api.get();
             let tempState = {
-                data13:data,
-                childData:childData,
+                masterData:data,
+                childTotalData:childTotalData,
                 showIndex:0
             }
 /*              console.log("data",data);
-             console.log("childData",childData);
+             console.log("childTotalData",childTotalData);
              console.log(success);  */   
             if (success) {
                 console.log("执行save方法");
@@ -40,23 +45,23 @@ export default {
             }
         },
         clear(){
-            actions.master.save({data13:[]});
+            actions.master.save({masterData:[]});
             Info("数据清除完毕");
         },
         rowClick(data,getState){
             console.log("data",data);
-            let {childData} = getState().master;
-            console.log("childData",childData);
+            let {childTotalData} = getState().master;
+            console.log("childTotalData",childTotalData);
             let tempState = {
-                data13_1 : childData[data]
+                childData : childTotalData[data]
             }
             actions.master.save(tempState);
         },
         async add(data,getState){
-            let { data : { success } } = await api.add(data);
-            if (success) {
-                actions.master.load();
+            let tempState = {
+                showIndex:1
             }
+            actions.master.save(tempState);
         },
         async createByPage(data,getState){
             let { data : { success } } = await api.add(data);

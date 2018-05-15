@@ -5,7 +5,9 @@ import Add from '../Add';
 import multiSelect from "tinper-bee/lib/multiSelect.js";
 import sort from "tinper-bee/lib/sort.js";
 import sum from "tinper-bee/lib/sum.js";
-const columns13 = [
+import Test from '../Test';
+// 主表列字段
+const masterCols = [
     {
       title: "督办编号",
       dataIndex: "code",
@@ -33,41 +35,42 @@ const columns13 = [
     }
   ];
   
-  const columns13_1 = [
+//   子表列字段
+const childCols = [
     {
-      title: "编号",
-      dataIndex: "sub_code",
-      key: "a",
-      width: 200
+        title: "编号",
+        dataIndex: "sub_code",
+        key: "a",
+        width: 200
     },
     {
-      title: "名称",
-      dataIndex: "sub_name",
-      key: "b",
-      width: 200
+        title: "名称",
+        dataIndex: "sub_name",
+        key: "b",
+        width: 200
     },
     {
-      title: "主办人",
-      dataIndex: "zbr",
-      key: "c",
-      width: 200,
-      sumCol: true,
+        title: "主办人",
+        dataIndex: "zbr",
+        key: "c",
+        width: 200,
+        sumCol: true,
     },
     {
-      title: "子任务描述",
-      dataIndex: "sub_ms",
-      key: "d",
-      width: 200
+        title: "子任务描述",
+        dataIndex: "sub_ms",
+        key: "d",
+        width: 200
     }
-  ];
+];
   
 
-/*   const data13 = [
+/*   const masterData = [
     { code: "001", name: "督办名称", ly_code: 30, zrr: "杨过", key: "2" },
     { code: "002", name: "男", ly_code: 41, zrr: "郭靖", key: "1" },
     { code: "003", name: "男", ly_code: 25, zrr: "欧阳锋", key: "3" }
   ];
-  const data13_1 = {
+  const childData = {
     0:[
         { sub_code: "001001", sub_name: "名称1", sub_ms: "小龙女", d: "内行", key: "2" },
         { sub_code: "001002", sub_name: "男", sub_ms: "杨过", d: "内行", key: "4" },
@@ -97,15 +100,6 @@ class MasterTable  extends Component {
     constructor(props) {
         super(props);
         console.log('props',props);
-/*         this.state = {
-            data13: [],
-            data13_1:[],
-            selectedRow: this.selectedRow,
-            selectDisabled: this.selectDisabled,
-            selData:[],
-            selChildData:[],
-            showIndex:0
-        }; */
     }
     getParSelectData = data => {
         // console.log(data);
@@ -115,9 +109,7 @@ class MasterTable  extends Component {
     }
     addClick = ()=>{
         console.log("添加数据");
-/*         this.setState({
-            showIndex:1
-        }) */
+        actions.master.add();
     }
     editClick = ()=>{
         console.log("编辑数据");
@@ -137,10 +129,14 @@ class MasterTable  extends Component {
         let multiObj = {
             type: "checkbox"
         };
-        let {showIndex,data13,data13_1} = this.props;
+        /**
+         *  masterData主表数据
+         *  childData子表数据
+         */
+        let {showIndex,masterData,childData} = this.props;
         console.log("showIndex",showIndex);
-/*         switch(showIndex){
-            case 0: */
+        switch(showIndex){
+            case 0:
                 return (
                     <div>
                         <ButtonGroup style={{ margin: 10 }}>
@@ -149,33 +145,33 @@ class MasterTable  extends Component {
                             <Button colors="primary" onClick={this.delClick}>删除</Button>
                         </ButtonGroup>
                         <ComplexTable
-                            columns={columns13}
-                            data={data13}
+                            columns={masterCols}
+                            data={masterData}
                             multiSelect={multiObj}
                             getSelectedDataFunc={this.getParSelectData}
                             onRowClick={this.rowClick}
                             title={currentData => <div>标题: 我是主表</div>}
                         />  
                         <ComplexTable
-                            columns={columns13_1}
-                            data={data13_1}
+                            columns={childCols}
+                            data={childData}
                             multiSelect={multiObj}
                             getSelectedDataFunc={this.getChildSelectData}
                             title={currentData => <div>标题: 我是子表</div>}
                         />
                     </div>  
                 );
-           /*  case 1:
+            case 1:
                 return (
                     <div>
-                        <Add />
+                        <Add masterData={masterData} childData={childData} />
                     </div>
                 );
             case 2:
                 return (
                     <div>修改</div>
                 );
-        } */
+        } 
     }
 }
 
