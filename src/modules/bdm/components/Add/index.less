@@ -54,11 +54,57 @@
                 position: absolute;
                 top: 7px;
             }
+
+        }
+        
+    }
+}
+
+.childtable {
+    background: #fff;
+    width: auto;
+    box-sizing: border-box;
+    position: relative;
+    font-family: "Open Sans", "Helvetica Neue", Arial, "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    .childhead {
+        -webkit-justify-content: center;
+        width: 100%;
+        height: 40px;
+        background-color:#fff;
+        border-bottom: 1px solid rgba(151, 151, 151, .4);
+        display: flex;
+        flex-direction: row;
+        align-content: space-between;
+        align-items: flex-start;
+        margin:0;
+        padding: 0;
+        box-sizing: border-box;
+        .workbreakdown {
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            color: rgb(3, 155, 229);
+            border-bottom: 3px solid rgb(3, 155, 229);
+            font-size: 14px;
+            padding: 0 24px 0 24px;
+        }
+        .annexinfo {
+            display: block;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 24px 0 24px;
+            overflow: hidden;
         }
     }
 }
 
-
+.childContent {
+    box-sizing: border-box;
+    padding: 10px 0 10px 0;
+    .childadd {
+        margin: 35px 0 10px 15px;
+    }
+}
 
 element.style {
     padding-top: 0;
@@ -92,13 +138,12 @@ element.style {
     padding-top: 20px
 } */
 
-/* .u-form {
+.u-form {
     .u-form-item{
-        display: inline-block;
-        width: 30%;
-        margin-left: 3%;
+        height: 46px;
+        position: relative;
     }
-} */
+} 
 
 .demo2 .cancel,
 .demo3 .cancel {
@@ -121,6 +166,14 @@ element.style {
     min-height: auto !important;
     padding-top: 3px !important;
     padding-bottom: 3px !important; 
+    .u-select {
+        display: inline-block;
+        width: 75% !important;
+        .u-select-selection {
+            border: 1px solid #bdbdbd;
+        }
+        font-size: 14px;
+    }
 }
 
 .u-col-md-4 .u-col-sm-4 .u-col-xs-4 {
@@ -141,7 +194,7 @@ element.style {
     .user-form {
         width: 100%;
         max-height: 530px;
-        position: absolute;
+        /* position: absolute; */
         overflow: auto;
         background-color: #f5f5f5;
         margin: 0 auto;
@@ -153,15 +206,36 @@ element.style {
             width: 100% !important;
         }
         .label_ajust {
-            display: inline-block;
             width: 20%;
+            float: left;
+            display: block;
+            height: 30px;
+            line-height: 30px;
         }
         .input_adjust {
             width:75%;
         }
+        .date_adjust {
+            .input_adjust;
+            display: inline-block;
+            overflow: hidden;
+        }
+        .error{
+            display: inline-block;
+            font-size: 12px;
+            color:#ff0000;
+        }
+        .reficon_adjust {
+            position: absolute;
+            top: 7px;
+            right: 16px;
+        }
     }
-}
 
+}
+.clearfloat {
+    clear: both;
+}
 .readonlyinput{
     background-color: #f5f5f5 !important;
     border: 1px solid rgb(206, 206, 206);
@@ -173,4 +247,13 @@ element.style {
 
 .u-label {
     font-size: 12px;
+
+}
+
+.u-input-group.simple .u-input-group-btn {
+    right:8px;
+}
+
+.uf-search {
+    top: 0;
 }

@@ -133,7 +133,7 @@ class MasterTable  extends Component {
          *  masterData主表数据
          *  childData子表数据
          */
-        let {showIndex,masterData,childData} = this.props;
+        let {showIndex,masterData,childData,refData,childPageFlag,cardPageChildData,count,childActivePage} = this.props;
         console.log("showIndex",showIndex);
         switch(showIndex){
             case 0:
@@ -164,7 +164,8 @@ class MasterTable  extends Component {
             case 1:
                 return (
                     <div>
-                        <Add masterData={masterData} childData={childData} />
+                        <Add masterData={masterData} childData={childData} refData={refData} childPageFlag={childPageFlag}
+                            cardPageChildData={cardPageChildData} count={count} childActivePage={childActivePage} />
                     </div>
                 );
             case 2:

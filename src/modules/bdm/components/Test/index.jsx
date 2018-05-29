@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import createModal from 'yyuap-ref';
-// import RefTree from 'yyuap-ref/dist2/RefTree'
 
 
 const option = {

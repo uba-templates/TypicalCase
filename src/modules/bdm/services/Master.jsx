@@ -5,7 +5,8 @@ const URL = {
     "GET_List": "https://mock.yonyoucloud.com/mock/204/test/getData",
     "ADD_List": "https://mock.yonyoucloud.com/mock/204/test/addData",
     "EDIT_List": "https://mock.yonyoucloud.com/test/editData",
-    "DELETE_List": "https://mock.yonyoucloud.com/test/deleteData"
+    "DELETE_List": "https://mock.yonyoucloud.com/test/deleteData",
+    "CARD_LIST":"https://mock.yonyoucloud.com/mock/204/test/getRefData"
 }
 
 export const get = () => {
@@ -32,5 +33,11 @@ export const remove = (list) => {
     return request(URL.DELETE_List, {
         method: "post",
         data: list
+    });
+}
+
+export const getCardList=()=>{
+    return request(URL.CARD_LIST, {
+        method: "get"
     });
 }
