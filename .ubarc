@@ -1,20 +1,13 @@
 {
   "proxy": [
+    
     {
-      "url": [
-        "/api/"
-      ],
+      "url": ["/iuap-example/","/newref/","/iuap-saas-filesystem-service/", "/wbalone/","/example/","/iuap-saas-message-center/","/eiap-plus/","/uitemplate_web/"],
+      "headers":{
+        "Referer": "http://10.10.24.43:8080/wbalone/index-view.html"
+      },
       "options": {
-        "target": "http://cnodejs.org"
-      }
-    },
-    {
-      "url": [
-        "/users/",
-        "/orgs/"
-      ],
-      "options": {
-        "target": "https://api.github.com"
+        "target": "http://10.10.24.43:8080"
       }
     }
   ],

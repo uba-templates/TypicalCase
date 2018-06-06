@@ -5,7 +5,10 @@ import React from "react";
 import { Route,Link } from "mirrorx";
 import User from './containers/User';
 import UserAdd from './containers/UserAdd';
-import Master from './containers/Master'
+import Master from './containers/Master';
+import BPM from './containers/BPM';
+import Card from './components/Card'
+
 
 
 const Routers = ({ match }) => (
@@ -16,6 +19,8 @@ const Routers = ({ match }) => (
         <Route exact path={`${match.url}/user`} component={User}/>
         <Route exact path={`${match.url}/user/add`} component={UserAdd}/>
         <Route exact path={`${match.url}/Master`} component={Master}/>
+        <Route exact path={`${match.url}/bpm`} component={BPM}/>
+        <Route exact path={`${match.url}/card`} component={Card}/>
 	</div>
 );
 

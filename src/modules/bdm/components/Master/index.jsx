@@ -1,129 +1,125 @@
 import React, { Component } from 'react';
 import { actions } from "mirrorx";
-import { Table,ButtonGroup, Button, Col, Row, Icon ,Popconfirm,Checkbox } from 'tinper-bee';
+import { Table,FormControl, ButtonGroup, Button, Col, Row, Icon, Popconfirm, Checkbox,FormGroup,Radio} from 'tinper-bee';
+import SearchPanel from 'bee-search-panel';
 import Add from '../Add';
+import Card from '../Card';
+import TableWrapper from '../TableWrapper';
+import PaginationWrapper from '../Pagination'
 import multiSelect from "tinper-bee/lib/multiSelect.js";
 import sort from "tinper-bee/lib/sort.js";
 import sum from "tinper-bee/lib/sum.js";
-import Test from '../Test';
+import "./index.less"
 // 主表列字段
 const masterCols = [
     {
-      title: "督办编号",
-      dataIndex: "code",
-      key: "code",
-      width: 200
+        title: "工单编码",
+        dataIndex: "code",
+        key: "code",
+        width: 150
     },
     {
-      title: "督办名称",
-      dataIndex: "name",
-      key: "b",
-      width: 200
+        title: "工单名称",
+        dataIndex: "name",
+        key: "name",
+        width: 150
     },
     {
-      title: "督办来源",
-      dataIndex: "ly_code",
-      key: "c",
-      width: 200,
-      sumCol: true,
+        title: "工单类型",
+        dataIndex: "type",
+        key: "type",
+        width: 150,
     },
     {
-      title: "责任人",
-      dataIndex: "zrr",
-      key: "d",
-      width: 200
-    }
-  ];
-  
-//   子表列字段
-const childCols = [
-    {
-        title: "编号",
-        dataIndex: "sub_code",
-        key: "a",
-        width: 200
+        title: "申请人",
+        dataIndex: "applicant",
+        key: "applicant",
+        width: 150,
     },
     {
-        title: "名称",
-        dataIndex: "sub_name",
-        key: "b",
-        width: 200
+        title: "申请时间",
+        dataIndex: "applyTime",
+        key: "applyTime",
+        width: 150,
     },
     {
-        title: "主办人",
-        dataIndex: "zbr",
-        key: "c",
-        width: 200,
-        sumCol: true,
+        title: "最后修改时间",
+        dataIndex: "lastModifyUser",
+        key: "lastModifyUser",
+        width: 150,
     },
     {
-        title: "子任务描述",
-        dataIndex: "sub_ms",
-        key: "d",
-        width: 200
+        title: "操作",
+        dataIndex: "operate",
+        key: "operate",
+        render(text, record, index) {
+            return (
+                <a
+                    href="#"
+                    tooltip={text}
+                    onClick={() => {
+                        alert('这是第' + index + '列，内容为:' + text);
+                    }}
+                >
+                    一些操作
+                    </a>
+            );
+        }
     }
 ];
-  
-
-/*   const masterData = [
-    { code: "001", name: "督办名称", ly_code: 30, zrr: "杨过", key: "2" },
-    { code: "002", name: "男", ly_code: 41, zrr: "郭靖", key: "1" },
-    { code: "003", name: "男", ly_code: 25, zrr: "欧阳锋", key: "3" }
-  ];
-  const childData = {
-    0:[
-        { sub_code: "001001", sub_name: "名称1", sub_ms: "小龙女", d: "内行", key: "2" },
-        { sub_code: "001002", sub_name: "男", sub_ms: "杨过", d: "内行", key: "4" },
-        { sub_code: "001003", sub_name: "男", sub_ms: "令狐冲", d: "大侠", key: "1" },
-        { sub_code: "001004", sub_name: "男", sub_ms: 25, d: "郭靖", key: "3" }
-    ],
-    1:[
-        { sub_code: "002001", sub_name: "名称2", sub_ms: "小龙女", d: "内行", key: "2" },
-        { sub_code: "002002", sub_name: "男", sub_ms: "杨过", d: "内行", key: "4" },
-        { sub_code: "002003", sub_name: "男", sub_ms: "令狐冲", d: "大侠", key: "1" },
-        { sub_code: "002004", sub_name: "男", sub_ms: 25, d: "郭靖", key: "3" }
-    ],
-    2:[
-        { sub_code: "003001", sub_name: "名称3", sub_ms: "小龙女", d: "内行", key: "2" },
-        { sub_code: "003002", sub_name: "男", sub_ms: "杨过", d: "内行", key: "4" },
-        { sub_code: "003003", sub_name: "男", sub_ms: "令狐冲", d: "大侠", key: "1" },
-        { sub_code: "003004", sub_name: "男", sub_ms: 25, d: "郭靖", key: "3" }
-    ]
-  } ; */
 
 let ComplexTable = multiSelect(sum(sort(Table)));
-class MasterTable  extends Component {
-    /* 
+class MasterTable extends Component {
+    /*      
         showIndex用于组件切换，为0表示加载列表
         为1、2分别表示新增、修改
      */
     constructor(props) {
         super(props);
-        console.log('props',props);
+        this.state = {
+            code:"",
+            name:""
+        }
     }
-    getParSelectData = data => {
-        // console.log(data);
-    };
-    getChildSelectData = data => {
-        console.log(data);
+
+    rowClick = (record, index, event) => {
+        actions.master.rowClick(record);
     }
-    addClick = ()=>{
-        console.log("添加数据");
-        actions.master.changePage({"showIndex":1});
+    selectedRow = (record, index) => {
+        console.log("selectedRow", index);
     }
-    editClick = ()=>{
-        console.log("编辑数据");
+
+    // 切换搜索框
+    onToggleSearch = () => {
+        let flag = this.props.searchFlag;
+        flag = !flag;
+        let tempState = {
+            searchFlag:flag
+        }
+        actions.master.save(tempState);
     }
-    delClick = ()=>{
-        console.log("删除数据");
-        // 根据pk请求后端删除，前端刷新
+
+    onSearch=()=>{
+        let {code,name} = this.state;
+        let tempState = {
+            search_code:code,
+            search_name:name
+        };
+        actions.master.load(tempState);
     }
-    rowClick=(record, index, event)=>{
-        console.log(record,index);
-        actions.master.rowClick(index);
+    onSearchInfoChange=(param)=>{
+        return value=>{
+            let json ={};
+            json[param+""] = value;
+            this.setState(json);
+        }
     }
-    selectedRow=(record,index)=>{
-        console.log("selectedRow",index);
+    clear=()=>{
+        this.setState({
+            code:"",
+            name:""
+
+        })
     }
     render() {
         let multiObj = {
@@ -131,49 +127,80 @@ class MasterTable  extends Component {
         };
         /**
          *  masterData主表数据
-         *  childData子表数据
          */
-        let {showIndex,masterData,childData,refData,childPageFlag,cardPageChildData,count,childActivePage} = this.props;
-        console.log("showIndex",showIndex);
-        switch(showIndex){
+        let { showIndex, masterData, childData, refData, childPageFlag, cardPageChildData, count, childActivePage,searchFlag,checkedArray,rowData,btnFlag,paginationRes } = this.props;
+        console.log("searchFlag", searchFlag);
+        
+        switch (showIndex) {
             case 0:
                 return (
-                    <div>
-                        <ButtonGroup style={{ margin: 10 }}>
-                            <Button colors="primary" onClick={this.addClick} >新增</Button>
-                            <Button colors="primary" onClick={this.editClick} >修改</Button>
-                            <Button colors="primary" onClick={this.delClick}>删除</Button>
-                        </ButtonGroup>
-                        <ComplexTable
-                            columns={masterCols}
+                    <div className="bgwhite">
+                        <div className="pap-title">工单管理</div>
+                        <div className="form-search">
+                            <div className="u-panel-heading u-collapse-updown">
+                                <span className="u-panel-title">查询与筛选
+                                    <span className="u-link" onClick={this.onToggleSearch}>
+                                        {
+                                           function toggleInvisible(searchFlag){
+                                               if(searchFlag) {
+                                                    return (<div><span style={{padding: "0 5px"}}>收起</span><a className="uf uf-arrow-up"></a></div>);
+                                               }else {
+                                                    return (<div><span style={{padding: "0 5px"}}>展开</span><a className="uf uf-arrow-down"></a></div>)
+                                               }
+                                           }(searchFlag)
+                                        }
+                                        
+                                    </span>
+                                </span>
+                            </div>
+                            <div className={searchFlag ?"u-row u-panel-body b-searech-open":"u-row u-panel-body b-searech-close"}>
+                                <Row>
+                                    <Col md={1} xs={1} sm={1}>
+                                        <div className='gray ml15 '>
+                                            工单编码
+                                        </div>
+                                    </Col>
+                                    <Col md={2} xs={2} sm={2} className="vertical-center" >
+                                        <FormControl ref="code" onChange={this.onSearchInfoChange("code")} value={this.state.code} />
+                                    </Col>
+                                    <Col md={1} xs={1} sm={1}>
+                                        <div className='gray ml15 '>
+                                            工单名称
+                                        </div>
+                                    </Col>
+                                    <Col md={2} xs={2} sm={2} className="vertical-center" >
+                                        <FormControl ref="name" onChange={this.onSearchInfoChange("name")} value={this.state.name}/>
+                                    </Col>
+                                </Row>
+                                <div className="float-right">
+                                    <Button size="sm" shape="border" colors="info" className="ml15" onClick={this.clear}>清空</Button>
+                                    <Button size="sm" colors="primary" className="ml15" onClick={this.onSearch}>搜索</Button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <TableWrapper
                             data={masterData}
-                            multiSelect={multiObj}
-                            getSelectedDataFunc={this.getParSelectData}
-                            onRowClick={this.rowClick}
-                            title={currentData => <div>标题: 我是主表</div>}
-                        />  
-                        <ComplexTable
-                            columns={childCols}
-                            data={childData}
-                            multiSelect={multiObj}
-                            getSelectedDataFunc={this.getChildSelectData}
-                            title={currentData => <div>标题: 我是子表</div>}
-                        />
-                    </div>  
+                            checkedArray={checkedArray}
+                        /> 
+                        
+                        <div className="horizon-center">
+                            <PaginationWrapper {...paginationRes}/>
+                        </div>
+                        
+                    </div>
                 );
             case 1:
                 return (
                     <div>
-                        <Add masterData={masterData} childData={childData} refData={refData} childPageFlag={childPageFlag}
-                            cardPageChildData={cardPageChildData} count={count} childActivePage={childActivePage} />
+                        <Card masterData={masterData} childData={childData} refData={refData} childPageFlag={childPageFlag}
+                            cardPageChildData={cardPageChildData} count={count} childActivePage={childActivePage} 
+                            rowData={rowData} btnFlag={btnFlag} />
                     </div>
                 );
-            case 2:
-                return (
-                    <div>修改</div>
-                );
-        } 
+        }
     }
 }
 
-export default MasterTable ;
+export default MasterTable;
