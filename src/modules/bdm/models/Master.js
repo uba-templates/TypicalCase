@@ -18,6 +18,7 @@ import moment from 'moment';
  * rowData 为行数据字段
  * paginationParam为分页的请求参数
  * paginationRes为请求列表返回的分页信息如总页数、总数据条数
+ * resFlag bpm模型是否启用
  */
 
 export default {
@@ -59,13 +60,11 @@ export default {
         async load(data,getState) {
             let paginationParam = getState().master.paginationParam;
             let reqParam = Object.assign({},data,paginationParam);
-            console.log("reqParam",reqParam)
+            console.log("reqParam",reqParam);
             let {data:{success,detailMsg:{data:{content,totalElements,totalPages}}}} = await api.get(reqParam);
-            console.log(success,content);
             if(content){
                 content = content.map((item,index)=>{
-                    console.log("applyTime",moment(item.applyTime).format('YYYY-MM-DD HH:mm:ss'));
-                    // return Object.assign({},item,{"key":item.id,"applyTime":moment(item.applyTime).format('YYYY-MM-DD HH:mm:ss')});
+                    // console.log("applyTime",moment(item.applyTime).format('YYYY-MM-DD HH:mm:ss'));
                     return Object.assign({},item,{"applyTime":moment(item.applyTime).format('YYYY-MM-DD HH:mm:ss')});
                 })
             }
@@ -124,31 +123,29 @@ export default {
             } */
             actions.master.save(data);
         },
-        async createByPage(data,getState){
+        /* async createByPage(data,getState){
             let { data : { success } } = await api.add(data);
             if (success) {
                 Info("用户添加成功");
                 actions.routing.goBack();
             }
-        },
+        }, */
         async edit(data,getState){
             let { data : { success } } = await api.edit(data);
             if (success) {
                 actions.master.load();
             }
         },
-        async editByPage(data,getState){
+        /* async editByPage(data,getState){
             let { data : { success } } = await api.edit(data);
             if (success) {
                 Info("用户修改成功");
                 actions.routing.goBack();
             }
-        },
+        }, */
         
         async remove(data,getState){
-            // let { data : { success } } = await api.remove(data);
-            /* let json = await api.remove(data);
-            console.log(JSON.stringify(json)); */
+            let { data : { success } } = await api.remove(data);
             if (success=="success") {
                 actions.master.load();
             }
@@ -160,60 +157,85 @@ export default {
             let result = await api.save(data);
             console.log(JSON.stringify(result));
             let {data:{success}} = result;
+            if(success=="success") {
+                // 添加成功后，提示保存成功
+                return {'pomFlag':true};
+            }
             console.log("addMasterData",success)
         },
 
-        async taskSwitch(data,getState) {
+        /* async taskSwitch(data,getState) {
             console.log("taskSwitch",data);
             actions.master.save(data);
-        },
+        }, */
         // 改变卡片页面子页面数据
-        async changeCardList(data,getState){
+        /* async changeCardList(data,getState){
             console.log(data);
             let tempState = {
                 cardPageChildData : data
             }
             actions.master.save(tempState);
-        },
+        }, */
 
         // 卡片页面添加空行
-        async addEmptyRow(data,getState){
+        /* async addEmptyRow(data,getState){
             console.log("addEmptyRow",data);
             actions.master.save(data);
-        },
+        }, */
 
         // 删除卡片页面空行
-        async deleteEmptyRow(data,getState){
+       /*  async deleteEmptyRow(data,getState){
             actions.master.save({cardPageChildData:[]});
             actions.master.save(data);
-        },
+        }, */
 
         // 改变卡片页面任务分解功能中分页控件
-        async changeChildPagination(data,getState) {
+       /*  async changeChildPagination(data,getState) {
             actions.master.save(data);
-        },
+        }, */
 
         // 提交数据
         async onCommit(data,getState) {
             // 先去查询是否启动了bpm流程，如果没有启动则直接进行提交，如果已经启动则提示已
-            // let { data : { success } } = await api.queryBpm(data);
             let {funccode,nodekey} = data;
             let bpmParam = {
                 funccode :funccode,
                 nodekey : nodekey
             }
-            let json = await api.queryBpm(bpmParam);
-            console.log("查询",JSON.stringify(json));
-            /* if (success) {
-                actions.master.load();
+            let { data : { success,detailMsg } } = await api.queryBpm(bpmParam);
 
-            } */
+            
+            if (success=="success") {
+                let commitParam = {
+                    "processDefineCode":detailMsg["data"]["res_code"],
+                    "submitArray":data["submitArray"]
+                }
+                //commit提交后，返回success状态显示fail_global
+                let result = await api.onCommit(commitParam);
+                console.log("result",result);
+                let flag = result["data"]["success"];
+                console.log("flag",flag);
+                if(flag=="success"){
+                    // actions.master.load();
+                    return {'pomFlag':true};
+                }
+            }else if(success=="fail_global") {
+                let {data:{message}} = result
+                return {'pomFlag':false,"message":message};
+            }
         },
 
-        // 撤回
+        // 撤回 recallFlag为1表示撤回成功
         async onRecall(data,getState) {
-            let json = await api.onRecall(data);
-            console.log("撤回",JSON.stringify(json));
+            let {data:{success,message}} = await api.onRecall(data);
+            if(success=="success"){
+                return {'pomFlag':true};
+            }else if(success=="fail_global") {
+                return {
+                    'pomFlag':false,
+                    'message':message
+                }
+            }
         }
     }
 }

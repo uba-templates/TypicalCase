@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Button,FormControl,Label,Checkbox,InputNumber,Input,Col, Row,Icon,Select} from 'tinper-bee';
+import { BpmTaskApprovalWrap } from 'components/BpmWebSDK';
 import Form from 'bee-form';
 import { actions } from 'mirrorx';
 import createModal from 'yyuap-ref';
@@ -42,8 +43,9 @@ class Card extends Component {
         )
     }
     // 返回按钮点击事件
-    backClick=()=>{
-        actions.master.changePage({"showIndex":0})
+    backClick= async ()=>{
+        await actions.master.changePage({"showIndex":0})
+        actions.master.load();
         // actions.routing.goBack();
     }
     // 参照图标点击事件
@@ -61,16 +63,16 @@ class Card extends Component {
                         {"title":"全部","key":"total"},
                         {"title":"推荐","key":"recommed"}
                     ],// option中可增加defaultActiveKey作为默认tab标签
-                    strFieldCode: ["refcode", "refname", "memo"],
-                    strFieldName:["编码", "名称", "备注"],
+                    // strFieldCode: ["refcode", "refname", "memo"],
+                    // strFieldName:["编码", "名称", "备注"],
                     param:{//url请求参数
                         refCode:'bd_new_user',
                         tenantId:'',
                         sysId:'',
                     },
                     refModelUrl:{
-                        TableBodyUrl:'http://10.10.24.43:8080/newref/rest/iref_ctr/blobRefTreeGrid',//表体请求
-                        TableBarUrl:'http://10.10.24.43:8080/newref/rest/iref_ctr/refInfo',//表头请求
+                        TableBodyUrl:'/newref/rest/iref_ctr/blobRefTreeGrid',//表体请求
+                        TableBarUrl:'/newref/rest/iref_ctr/refInfo',//表头请求
                     },
                     checkedArray:[],
                     onCancel: function (p) {
@@ -107,7 +109,7 @@ class Card extends Component {
      * 保存事件中进行字段验证,字段验证应该包括类型、格式、是否必输项
      * 
      */
-    saveClick=()=>{
+    saveClick =  ()=>{
         
         console.log("saveClick",this.props.form);
         /* 
@@ -118,21 +120,24 @@ class Card extends Component {
         this.props.form.validateFields(fieldArray,{
             first:false,
             force:true
-        },(error,value)=>{
+        },async (error,value)=>{
             console.log("error",error,value);
             if(!error){
                 let {btnFlag} = this.props;
                 switch(btnFlag){
                     // 新增
                     case 0:
-                        actions.master.addMasterData(value);
+                        let {pomFlag} = await actions.master.addMasterData(value);
+                        if(pomFlag) {
+                            alert('单据保存成功');
+                        }
                         break;
                     // 编辑
                     case 1:
-                        actions.master.addMasterData(value);
+                        await actions.master.addMasterData(value);
                         break;
                     default:
-                        actions.master.addMasterData(value);
+                        await actions.master.addMasterData(value);
                 }
                 
             }
@@ -150,7 +155,6 @@ class Card extends Component {
     render() {
         const { getFieldProps, getFieldError,getFieldDecorator} = this.props.form;
         let {childPageFlag,cardPageChildData,count,childActivePage,btnFlag} = this.props;
-        // let btnFlag = 0;
         let {code,name,type,content,status,applicant,remark,applyTime} = this.props.rowData;
         // let code="",name="",type="",content="",status="",applicant="",remark="",applyTime;
         
@@ -162,14 +166,18 @@ class Card extends Component {
                         <div className="topPart">
                             <Button size="sm" colors="primary" className="editable-add-btn backBtn" onClick={this.backClick}>返回</Button>
                             <h1>新建督办任务</h1>
-                            <Button size="sm" shape="border" colors="info" className={this.props.btnFlag==2? "hide":"cancelBtn"}>取消</Button>
-                            <Button size="sm" colors="primary" className={this.props.btnFlag==2? "hide":"saveBtn"} onClick={this.saveClick}>保存</Button>
+                            <Button size="sm" shape="border" colors="info" className={btnFlag==2? "hide":"cancelBtn"}>取消</Button>
+                            <Button size="sm" colors="primary" className={btnFlag==2 ? "hide":"saveBtn"} onClick={this.saveClick}>保存</Button>
                         </div>
                     </div>
                 </div>
-                <div className="bpm-head">
-                    <Button size="sm" colors="primary" onClick={this.onClickToBPM}>流程图</Button>
-                </div>
+                
+                <BpmTaskApprovalWrap
+                        id={this.props.rowData.id}
+                        onBpmFlowClick={this.onClickToBPM}
+                        appType={"1"}
+                    />
+                
                 <div className="content">
             
                     <div className="user-form" disabled={btnFlag==2?"disabled":false}>

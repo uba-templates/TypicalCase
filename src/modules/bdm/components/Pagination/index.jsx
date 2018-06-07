@@ -16,11 +16,19 @@ class PaginationWrapper extends Component {
             activePage:1
         };
     }
-    onPageChange=(eventKey)=>{
+    onPageChange= async (eventKey)=>{
         // 切换显示的页数
+        alert(eventKey);
         this.setState({
             activePage:eventKey
-        })
+        });
+        await actions.master.save({
+            paginationParam:{
+                pageIndex:eventKey-1,
+                pageSize:this.state.pageSize
+            }
+        });
+        await actions.master.load();
     }
 
     onNumberChange = (value)=>{

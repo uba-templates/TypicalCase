@@ -6,8 +6,8 @@ const URL = {
     "DELETE_List": "/iuap-example/example_workorder/delete",
     "SAVE_FORM":"/iuap-example/example_workorder/save",
     "QUERY_BPM_URL":"/eiap-plus/appResAllocate/queryBpmTemplateAllocate/",
-    "COMMIT_URL":"/example/ygdemo_yw_info/submit",
-    "RECALL_URL":"/example/ygdemo_yw_info/unsubmit"
+    "COMMIT_URL":"/iuap-example/example_workorder/submit",
+    "RECALL_URL":"/iuap-example/example_workorder/recall"
 }
 
 export const get = (param) => {
@@ -54,9 +54,18 @@ export const queryBpm = (param)=>{
     });
 }
 
-export const COMMIT_URL = (param)=>{
+export const onCommit = (data)=>{
+    console.log("processDefineCode",data['processDefineCode']);
     return request(URL.COMMIT_URL, {
         method: "post",
-        param :param
+        data :data['submitArray'],
+        param:{"processDefineCode":data['processDefineCode']}
+    });
+}
+
+export const onRecall = (data)=>{
+    return request(URL.RECALL_URL, {
+        method: "post",
+        data :data
     });
 }

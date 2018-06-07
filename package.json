@@ -10,11 +10,30 @@
   "author": "liuzhpc@yonyou.com",
   "license": "MIT",
   "devDependencies": {
-    "uba": "4.0.0-rc.1",
-    "uba-server-mock": "^2.0.2",
-    "uba-server-proxy": "^2.0.2",
-    "uba-server-static": "^2.0.1",
-    "webpack-bundle-analyzer": "^2.11.1"
+    "autoprefixer": "^8.0.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.18",
+    "copy-webpack-plugin": "^4.4.2",
+    "css-loader": "^0.28.10",
+    "cssnano": "^3.10.0",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "file-loader": "^1.1.9",
+    "html-webpack-plugin": "^2.30.1",
+    "less": "^3.0.1",
+    "less-loader": "^4.0.5",
+    "open-browser-webpack-plugin": "^0.0.5",
+    "postcss-loader": "^2.1.0",
+    "style-loader": "^0.20.2",
+    "uba": "2.3.11",
+    "uglifyjs-webpack-plugin": "^1.2.2",
+    "url-loader": "^0.6.2",
+    "webpack-bundle-analyzer": "^2.11.3",
+    "webpack-hot-middleware": "^2.21.0"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -32,6 +51,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "tinper-bee": "^1.3.7",
-    "yyuap-ref": "^1.0.56"
+    "yyuap-ref": "^1.0.56",
+    "postcss-flexbugs-fixes": "^3.3.0"
   }
 }

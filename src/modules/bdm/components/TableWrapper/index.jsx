@@ -61,6 +61,7 @@ class TableWrapper extends Component {
         this.state = {
             checkedAll: false,
             checkedArray: [],
+            commitFlag:0
         };
     }
     
@@ -203,6 +204,7 @@ class TableWrapper extends Component {
         console.log("添加数据");
         let tempState = {
             "showIndex": 1 ,
+            "btnFlag":0,
             "rowData":{}
         }
         actions.master.changePage(tempState);
@@ -244,37 +246,50 @@ class TableWrapper extends Component {
     }
 
     // 提交方法
-    onCommit = ()=>{
-        let {checkedArray} = this.state;
-        let rowData,data=this.props.data;
-        // 查看时检查是否已选中数据
-        let checkedFlag = false;
-        for(var i=0;i<checkedArray.length;i++){
-            if(checkedArray[i]){
-                checkedFlag = true;
-                rowData = data[i];
-                break;
+    onCommit = async ()=>{
+        
+        let { checkedArray } = this.state;
+        let data = this.props.data;
+        console.log("data", data);
+        let length = (data.length < checkedArray.length) ? data.length : checkedArray.length;
+        let submitArray = [];
+        for (var i = 0; i < checkedArray.length; i++) {
+            if (checkedArray[i]) {
+                if(data[i]["status"]==0){
+                    submitArray.push({ "id": data[i]["id"] });
+                }else {
+                    alert(`单据${data[i]["code"]}不能重复提交`);
+                }
+                
+                // submitArray.push(data[i]);
             }
         }
+        console.log("submitArray", submitArray);
 
-        if(!checkedFlag){
-            alert("请选择提交的数据");
-            return;
-        }else {
+        if (submitArray.length > 0) {
             let tempState = {
-                "funccode":"ygdemo_yw_info",
-                "nodekey":"003",
-                "rowData":rowData
+                "funccode": "react",
+                "nodekey": "003",
+                "submitArray": submitArray
             }
-            actions.master.onCommit(tempState)
-            /* actions.routing.push({
-                pathname:'/bdm/card',
-            }) */
+            let {pomFlag,message} = await actions.master.onCommit(tempState);
+            if(pomFlag){
+                alert("单据提交操作成功");
+                actions.master.load();
+            }else {
+                alert(message);
+            }
+        } else {
+            // 弹出提示请选择数据
+            alert("请重新选择提交数据");
         }
+        
+
+        
     }
 
     // 撤回
-    onRecall = ()=>{
+    onRecall = async ()=>{
         let {checkedArray} = this.state;
         let data = this.props.data;
         console.log("data",data);
@@ -282,14 +297,25 @@ class TableWrapper extends Component {
         let recallArray = [];
         for(var i=0;i<checkedArray.length;i++){
             if(checkedArray[i]){
-                recallArray.push({"id":data[i][id]});
+                if(data[i]["status"]==1){
+                    recallArray.push({"id":data[i]["id"]});
+                }else {
+                    alert(`单据${data[i]["code"]}未提交,不能执行撤回操作`);
+                } 
             }
         }
         console.log("撤回",recallArray);
         if(recallArray.length>0){
-            actions.master.onRecall(recallArray);
+            let {pomFlag,message} = await actions.master.onRecall(recallArray);
+            if(pomFlag){
+                alert('单据撤回操作成功');
+                actions.master.load();
+            }else {
+                alert(message);
+            }
         }else {
             // 弹出提示请选择数据
+            alert("请选择撤回");
         }
     }
 

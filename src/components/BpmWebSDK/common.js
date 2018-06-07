@@ -64,7 +64,7 @@ export const descriptionToText = (vApproveType) => {
     }
 }
 
-export const getBpmTaskURL = (type, root = "eiap-plus/") => {
+export const getBpmTaskURL = (type, root = "/eiap-plus/") => {
     switch (type) {
         case 'agree':
             return root + 'task/completetask/approveCard';
@@ -178,7 +178,7 @@ export const sendBpmTaskAJAX = (type, data) => {
 }
 
 export const billidToIds = (billId) => {
-    return axios.post('eiap-plus/process/getbillbpm',{
+    return axios.post('/eiap-plus/process/getbillbpm',{
         billId
     });
 }

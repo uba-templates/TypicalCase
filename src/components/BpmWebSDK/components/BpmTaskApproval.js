@@ -11,7 +11,8 @@ import { getBpmTaskURL, sendBpmTaskAJAX, billidToIds } from '../common';
 const propTypes = {
     host: PropTypes.string,
     id: PropTypes.string,
-    appType: PropTypes.string
+    appType: PropTypes.string,
+    onBpmFlowClick: PropTypes.func
 };
 
 class BpmTaskApproval extends Component {
@@ -389,6 +390,12 @@ class BpmTaskApproval extends Component {
 
         console.log(msg);
     }
+    handlerFlow = () => {
+        let onBpmFlowClick = this.props.onBpmFlowClick;
+        if (onBpmFlowClick) {
+            onBpmFlowClick();
+        }
+    }
     render() {
         let { processDefinitionId, processInstanceId, host } = this.props;
         return (
@@ -398,7 +405,7 @@ class BpmTaskApproval extends Component {
                         <Button style={{ "marginRight": "10px" }} >返回</Button>
                     </Col> */}
                     <Col mdOffset={10} md={2}>
-                        <Button style={{ "marginRight": "10px" }} colors="primary">流程图</Button>
+                        <Button onClick={this.handlerFlow} style={{ "marginRight": "10px" }} colors="primary">流程图</Button>
                         <Button onClick={this.handerSubmitBtn} style={{ "marginRight": "10px" }} colors="primary">提交</Button>
                     </Col>
                 </Row>
